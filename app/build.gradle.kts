@@ -73,6 +73,7 @@ graalvmNative {
             mainClass.set("com.xtarxyan.JMatConv")
             buildArgs.add("-march=native")
             buildArgs.add("-O3")
+            buildArgs.add("--gc=G1")
         }
     }
 }
