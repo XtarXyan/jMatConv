@@ -24,9 +24,17 @@ public class WriterWorker implements Runnable {
         ImageInfo outputInfo = new ImageInfo(Converter.outWidth, Converter.outHeight, 8, false);
         PngWriter writer = new PngWriter(outputFile, outputInfo, true);
 
-        PngReader r1 = Converter.readers.get(Converter.inputLocs.get(channel1) / 3);
-        PngReader r2 = Converter.readers.get(Converter.inputLocs.get(channel2) / 3);
-        PngReader r3 = Converter.readers.get(Converter.inputLocs.get(channel3) / 3);
+        int loc1 = Converter.inputLocs.get(channel1);
+        int loc2 = Converter.inputLocs.get(channel2);
+        int loc3 = Converter.inputLocs.get(channel3);
+
+        PngReader r1 = Converter.readers.get(loc1 / 3);
+        PngReader r2 = Converter.readers.get(loc2 / 3);
+        PngReader r3 = Converter.readers.get(loc3 / 3);
+
+        int numChannels1 = r1.imgInfo.channels;
+        int numChannels2 = r2.imgInfo.channels;
+        int numChannels3 = r3.imgInfo.channels;
 
         for (int i = 0; i < outputInfo.rows; i++) {
 
@@ -41,10 +49,11 @@ public class WriterWorker implements Runnable {
             int[] writerScanline = writerLine.getScanline();
 
             for (int j = 0; j < outputInfo.cols; j++) {
-                writerScanline[j * 3] = ( channel1 != ChannelType.skip ? sl1[(j * 3) * r1.imgInfo.cols / outputInfo.cols] : 0 );
-                writerScanline[j * 3 + 1] = ( channel2 != ChannelType.skip ? sl2[(j * 3 + 1) * r2.imgInfo.cols / outputInfo.cols] : 0 );
-                writerScanline[j * 3 + 2] = ( channel3 != ChannelType.skip ? sl3[(j * 3 + 2) * r3.imgInfo.cols / outputInfo.cols] : 0 );
+                writerScanline[j * 3] = ( channel1 != ChannelType.skip ? sl1[(j * numChannels1 * r1.imgInfo.cols / outputInfo.cols) + loc1 % 3] : 0 );
+                writerScanline[j * 3 + 1] = ( channel2 != ChannelType.skip ? sl2[(j * numChannels2 * r2.imgInfo.cols / outputInfo.cols) + loc2 % 3] : 0 );
+                writerScanline[j * 3 + 2] = ( channel3 != ChannelType.skip ? sl3[(j * numChannels3 * r3.imgInfo.cols / outputInfo.cols) + loc3 % 3] : 0 );
             }
+            
             writer.writeRow(writerLine);
         }
 

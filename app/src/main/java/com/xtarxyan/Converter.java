@@ -186,7 +186,7 @@ public class Converter {
             throw new RuntimeException("There are more specified output layers than the number of output files support!");
         }
 
-        
+        inputLocs.put(ChannelType.skip, 0);
     }
 
     private static ChannelType resolveChannel(char c)
