@@ -49,6 +49,10 @@ public class Converter {
         {
             thread.start();
         }
+        for (Thread thread : threadList)
+        {
+            thread.join();
+        }
     }
 
     public static void convertBasic(String origFilename, String destFilename) throws PngjException {
