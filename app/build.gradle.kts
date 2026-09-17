@@ -54,6 +54,7 @@ testing {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
+        vendor = JvmVendorSpec.GRAAL_VM
     }
     withJavadocJar()
     withSourcesJar()
